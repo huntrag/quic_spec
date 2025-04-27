@@ -18,11 +18,26 @@ def json_value_to_tla(value):
     else:
         raise ValueError(f"Unsupported JSON value: {value}")
 
+def process_events(events):
+    processed = []
+    for event in events:
+        if isinstance(event, list) and len(event) >= 1:
+            # Assume the first element is time
+            time = event[0]
+            if isinstance(time, (int, float)):
+                event[0] = int(time * 10**4)
+        processed.append(event)
+    return processed
+
 def convert_qlog_to_tla(qlog_data):
     tla_constants = json_value_to_tla(qlog_data)
     return tla_constants
 
 def main():
+    if len(sys.argv) != 3:
+        print("Usage: python script.py input.json output.tla")
+        sys.exit(1)
+
     input_file = sys.argv[1]
     output_file = sys.argv[2]
 
@@ -32,14 +47,16 @@ def main():
     if isinstance(qlog_data, dict):
         qlog_traces = qlog_data['traces']
     else:
-        raise ValueError("Empty dictionary.")
+        raise ValueError("Invalid JSON structure: Expected dictionary at root.")
 
-    tla_text = convert_qlog_to_tla(qlog_traces[0]["events"])
+    events = qlog_traces[0]["events"]
+
+    processed_events = process_events(events)
+    tla_text = convert_qlog_to_tla(processed_events)
 
     directory = os.path.dirname(output_file)
-
     if directory and not os.path.exists(directory):
-        os.makedirs(directory, exist_ok=True) 
+        os.makedirs(directory, exist_ok=True)
 
     with open(output_file, 'w') as f:
         f.write(tla_text)
