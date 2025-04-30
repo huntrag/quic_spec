@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.lamport.tla.toolbox.tool.tlc.modelCheck">
+    <stringAttribute key="configurationName" value="Model_2_SnapShot_1745979613443"/>
+    <intAttribute key="distributedFPSetCount" value="0"/>
+    <stringAttribute key="distributedNetworkInterface" value="192.168.1.12"/>
+    <intAttribute key="distributedNodesCount" value="1"/>
+    <stringAttribute key="distributedTLC" value="off"/>
+    <intAttribute key="fpIndex" value="9"/>
+    <intAttribute key="maxHeapSize" value="25"/>
+    <stringAttribute key="modelBehaviorInit" value=""/>
+    <stringAttribute key="modelBehaviorNext" value=""/>
+    <stringAttribute key="modelBehaviorSpec" value="Spec"/>
+    <intAttribute key="modelBehaviorSpecType" value="1"/>
+    <stringAttribute key="modelBehaviorVars" value="ci, si"/>
+    <stringAttribute key="modelComments" value=""/>
+    <booleanAttribute key="modelCorrectnessCheckDeadlock" value="true"/>
+    <listAttribute key="modelCorrectnessInvariants">
+        <listEntry value="0Safety_NoUnknownRecv"/>
+        <listEntry value="0Safety_PktNosMonotonic"/>
+        <listEntry value="0Safety_AllUsedStreamsTyped"/>
+        <listEntry value="0Safety_AtMost1HandshakeClosePerTrace"/>
+        <listEntry value="0SAFETY"/>
+    </listAttribute>
+    <listAttribute key="modelCorrectnessProperties">
+        <listEntry value="0LIVENESS"/>
+        <listEntry value="0Liveness_AllTypedStreamsUsed"/>
+        <listEntry value="0Liveness_EverySentPktHandled"/>
+        <listEntry value="0Liveness_HandshakeEnables1RTT"/>
+        <listEntry value="0Liveness_ConnCloseEventuallyObserved"/>
+        <listEntry value="1Liveness_TypedStreamEventuallyFin"/>
+        <listEntry value="1Safety_NoUnknownRecv"/>
+        <listEntry value="0Safety_AtMost1HandshakeClosePerTrace"/>
+        <listEntry value="0Safety_PktNosMonotonic"/>
+        <listEntry value="1Safety_AllUsedStreamsTyped"/>
+        <listEntry value="1Safety_AtMost1HandshakeClosePerTrace"/>
+    </listAttribute>
+    <intAttribute key="modelEditorOpenTabs" value="8"/>
+    <stringAttribute key="modelExpressionEval" value=""/>
+    <listAttribute key="modelParameterConstants">
+        <listEntry value="ServerTrace;;&lt;&lt;&#13;&#10;  [name |-&gt; &quot;transport:packet_received&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 1, packet_type |-&gt; &quot;initial&quot;]],&#13;&#10;   time |-&gt; 1],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_sent&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 1, packet_type |-&gt; &quot;initial&quot;]],&#13;&#10;   time |-&gt; 2],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;http:stream_type_set&quot;,&#13;&#10;   data |-&gt; [stream_id |-&gt; 0, new |-&gt; &quot;control&quot;],&#13;&#10;   time |-&gt; 3],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;http:stream_type_set&quot;,&#13;&#10;   data |-&gt; [stream_id |-&gt; 4, new |-&gt; &quot;qpack_encoder&quot;],&#13;&#10;   time |-&gt; 3],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_received&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 2, packet_type |-&gt; &quot;handshake&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;handshake_done&quot;] &gt;&gt;],&#13;&#10;   time |-&gt; 4],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_sent&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 2, packet_type |-&gt; &quot;handshake&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;handshake_done&quot;] &gt;&gt;],&#13;&#10;   time |-&gt; 5],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_received&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 3, packet_type |-&gt; &quot;1RTT&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;stream&quot;, stream_id |-&gt; 4, fin |-&gt; TRUE] &gt;&gt;],&#13;&#10;   time |-&gt; 6],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_received&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 3, packet_type |-&gt; &quot;1RTT&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;stream&quot;, stream_id |-&gt; 0, fin |-&gt; TRUE] &gt;&gt;],&#13;&#10;   time |-&gt; 6],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_received&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 4, packet_type |-&gt; &quot;1RTT&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;connection_close&quot;] &gt;&gt;],&#13;&#10;   time |-&gt; 7]&#13;&#10;&gt;&gt;;0;0"/>
+        <listEntry value="ClientTrace;;&lt;&lt;&#13;&#10;  [name |-&gt; &quot;transport:packet_sent&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 1, packet_type |-&gt; &quot;initial&quot;]],&#13;&#10;   time |-&gt; 1],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_received&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 1, packet_type |-&gt; &quot;initial&quot;]],&#13;&#10;   time |-&gt; 2],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;http:stream_type_set&quot;,&#13;&#10;   data |-&gt; [stream_id |-&gt; 0, new |-&gt; &quot;control&quot;],&#13;&#10;   time |-&gt; 3],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;http:stream_type_set&quot;,&#13;&#10;   data |-&gt; [stream_id |-&gt; 4, new |-&gt; &quot;qpack_encoder&quot;],&#13;&#10;   time |-&gt; 3],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_sent&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 2, packet_type |-&gt; &quot;handshake&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;handshake_done&quot;] &gt;&gt;],&#13;&#10;   time |-&gt; 4],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_received&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 2, packet_type |-&gt; &quot;handshake&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;handshake_done&quot;] &gt;&gt;],&#13;&#10;   time |-&gt; 5],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_sent&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 3, packet_type |-&gt; &quot;1RTT&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;stream&quot;, stream_id |-&gt; 0, fin |-&gt; TRUE],&#13;&#10;                          [frame_type |-&gt; &quot;stream&quot;, stream_id |-&gt; 4, fin |-&gt; TRUE] &gt;&gt;],&#13;&#10;   time |-&gt; 6],&#13;&#10;&#13;&#10;  [name |-&gt; &quot;transport:packet_sent&quot;,&#13;&#10;   data |-&gt; [header |-&gt; [packet_number |-&gt; 4, packet_type |-&gt; &quot;1RTT&quot;],&#13;&#10;             frames |-&gt; &lt;&lt; [frame_type |-&gt; &quot;connection_close&quot;] &gt;&gt;],&#13;&#10;   time |-&gt; 7]&#13;&#10;&gt;&gt;;0;0"/>
+    </listAttribute>
+    <intAttribute key="modelVersion" value="20191005"/>
+    <intAttribute key="numberOfWorkers" value="6"/>
+    <stringAttribute key="result.mail.address" value=""/>
+    <stringAttribute key="specName" value="QLogTrace3"/>
+    <stringAttribute key="tlcResourcesProfile" value="local custom"/>
+</launchConfiguration>

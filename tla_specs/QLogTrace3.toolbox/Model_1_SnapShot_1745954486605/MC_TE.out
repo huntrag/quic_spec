@@ -1,0 +1,36 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 13 and seed 8940843951333792342 with 6 workers on 12 cores with 596MB heap and 1337MB offheap memory [pid: 37304] (Windows 10 10.0 amd64, AdoptOpenJDK 14.0.1 x86_64, OffHeapDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file D:\IIT Bhubaneswar\Academics\MTP\MTPUbuntu\tla_specs\QLogTrace3.toolbox\Model_1\MC.tla
+Parsing file D:\IIT Bhubaneswar\Academics\MTP\MTPUbuntu\tla_specs\QLogTrace3.toolbox\Model_1\QLogTrace3.tla
+Parsing file C:\Users\r29ag\Downloads\TLAToolbox-1.7.4-win32.win32.x86_64\toolbox\plugins\org.lamport.tlatools_1.0.0.202408081326\tla2sany\StandardModules\TLC.tla
+Parsing file C:\Users\r29ag\Downloads\TLAToolbox-1.7.4-win32.win32.x86_64\toolbox\plugins\org.lamport.tlatools_1.0.0.202408081326\tla2sany\StandardModules\Sequences.tla
+Parsing file C:\Users\r29ag\Downloads\TLAToolbox-1.7.4-win32.win32.x86_64\toolbox\plugins\org.lamport.tlatools_1.0.0.202408081326\tla2sany\StandardModules\FiniteSets.tla
+Parsing file C:\Users\r29ag\Downloads\TLAToolbox-1.7.4-win32.win32.x86_64\toolbox\plugins\org.lamport.tlatools_1.0.0.202408081326\tla2sany\StandardModules\Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module QLogTrace3
+Semantic processing of module MC
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2025-04-30 00:51:25)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2105:1 @!@!@
+Evaluating assumption line 64, col 8 to line 64, col 66 of module MC failed.
+TLC encountered a non-enumerable quantifier bound
+<<[frame_type |-> "stream", stream_id |-> 0, fin |-> TRUE]>>.
+line 39, col 38 to line 39, col 43 of module QLogTrace3
+@!@!@ENDMSG 2105 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 1006ms at (2025-04-30 00:51:25)
+@!@!@ENDMSG 2186 @!@!@

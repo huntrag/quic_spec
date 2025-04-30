@@ -52,9 +52,9 @@ Safety_NoRecvUnknownPacket == RecvPktNums \subseteq SentPktNums
 
 Safety_AllStreamsTypeSet == (SentStreams \cup RecvStreams) \subseteq TypeSetStreams
 
-\*Safety_CloseFollowsHandshake ==
-\*  (ConnectionCloseSent # {}) => (HandshakeDoneSent # {}) /\
-\*  (ConnectionCloseRecv # {}) => (HandshakeDoneRecv # {})
+Safety_CloseFollowsHandshake ==
+  ((ConnectionCloseSent # {}) => (HandshakeDoneSent # {})) /\
+  ((ConnectionCloseRecv # {}) => (HandshakeDoneRecv # {}))
 
 Safety_AtMostOneHandshakeAndClose ==
   Cardinality(HandshakeDoneSent) <= 1 /\
@@ -86,17 +86,19 @@ Safety_StreamTypeUnique ==
   \A s \in TypeSetStreams :
     Cardinality({ i \in ValidTypeSetIndices : Trace[i].data.stream_id = s }) = 1
 
-\*Safety_UniqueCIDSet ==
-\*  LET newconnframes ==
-\*    { f["connection_id"] :
-\*        i \in 1..Len(Trace),
-\*        "frames" \in DOMAIN Trace[i].data,
-\*        f \in Trace[i].data.frames,
-\*        "frame_type" \in DOMAIN f,
-\*        f["frame_type"] = "new_connection_id",
-\*        "connection_id" \in DOMAIN f
-\*    }
-\*  IN Cardinality(newconnframes) = Cardinality({ c \in newconnframes : TRUE })
+Safety_UniqueCIDSet ==
+  LET newconnframes ==
+    UNION {
+      IF "frames" \in DOMAIN Trace[i].data THEN
+        IF "connection_id" \in DOMAIN Trace[i].data THEN
+        { f["connection_id"] :
+          f \in Trace[i].data.frames
+        }
+        ELSE {}
+      ELSE {} : i \in 1..Len(Trace)
+    }
+  IN Cardinality(newconnframes) = Cardinality({c \in newconnframes : TRUE})
+
 
 \* LIVENESS PROPERTIES
 
@@ -151,5 +153,11 @@ Liveness_StreamEventuallyFin ==
       (\E f \in Trace[i].data.frames :
         "stream_id" \in DOMAIN f /\ f["stream_id"] = s /\
         "fin" \in DOMAIN f /\ f["fin"] = TRUE)
+        
+Init == TRUE
+
+Next == UNCHANGED << >>
+
+Spec == Init /\ [][Next]_<< >>
 
 =====================================================================================

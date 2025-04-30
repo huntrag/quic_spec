@@ -2,7 +2,7 @@
 EXTENDS QLogTrace2, TLC
 
 \* CONSTANT definitions @modelParameterConstants:0Trace
-const_174581165277140000 == 
+const_1745984387808457000 == 
 <<
   [data |-> [header |-> [packet_number |-> 0, packet_type |-> "initial", dcid |-> "0001", scid |-> "D1"],
              frames |-> << [frame_type |-> "crypto", stream_id |-> 0] >>],
@@ -29,15 +29,6 @@ const_174581165277140000 ==
 >>
 ----
 
-\* Constant expression definition @modelExpressionEval
-const_expr_174581165277141000 == 
-Liveness_HandshakeLeadsTo1RTT
-----
-
-\* Constant expression ASSUME statement @modelExpressionEval
-ASSUME PrintT(<<"$!@$!@$!@$!@$!",const_expr_174581165277141000>>)
-----
-
 =============================================================================
 \* Modification History
-\* Created Mon Apr 28 09:10:52 IST 2025 by r29ag
+\* Created Wed Apr 30 09:09:47 IST 2025 by r29ag
