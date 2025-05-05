@@ -14,19 +14,15 @@ Min(S) == CHOOSE x \in S : \A y \in S : x <= y
 Max(S) == CHOOSE x \in S : \A y \in S : x >= y
 
 
-\* GATHERING EVENT INDICES
-
 SentEvents == { i \in 1..Len(Trace) : "header" \in DOMAIN Trace[i].data /\ Trace[i].name = "transport:packet_sent" }
 RecvEvents == { i \in 1..Len(Trace) : "header" \in DOMAIN Trace[i].data /\ Trace[i].name = "transport:packet_received" }
 DropEvents == { i \in 1..Len(Trace) : "header" \in DOMAIN Trace[i].data /\ Trace[i].name = "transport:packet_dropped" }
 
-\* PACKET NUMBER SETS
 
 SentPktNums == { Trace[i].data.header.packet_number : i \in SentEvents }
 RecvPktNums == { Trace[i].data.header.packet_number : i \in RecvEvents }
 DropPktNums == { Trace[i].data.header.packet_number : i \in DropEvents }
 
-\* STREAM REFERENCE SETS
 
 ValidSentFrames == { i \in SentEvents : "frames" \in DOMAIN Trace[i].data }
 ValidRecvFrames == { i \in RecvEvents : "frames" \in DOMAIN Trace[i].data }
@@ -41,7 +37,6 @@ RecvStreams == UNION { GetStreamIDs(Trace[i].data.frames) : i \in ValidRecvFrame
 ValidTypeSetIndices == { i \in 1..Len(Trace) : Trace[i].name = "http:stream_type_set" /\ "stream_id" \in DOMAIN Trace[i].data }
 TypeSetStreams == { Trace[i].data.stream_id : i \in ValidTypeSetIndices }
 
-\* HANDSHAKE/CLOSE EVENTS
 
 HasHandshake(frames) == \E f \in frames : "frame_type" \in DOMAIN f /\ f["frame_type"] = "handshake_done"
 HasClose(frames) == \E f \in frames : "frame_type" \in DOMAIN f /\ f["frame_type"] = "connection_close"
@@ -52,7 +47,6 @@ HandshakeDoneRecv == { i \in ValidRecvFrames : HasHandshake(Trace[i].data.frames
 ConnectionCloseSent == { i \in ValidSentFrames : HasClose(Trace[i].data.frames) }
 ConnectionCloseRecv == { i \in ValidRecvFrames : HasClose(Trace[i].data.frames) }
 
-\* SAFETY PROPERTIES
 
 Safety_NoRecvUnknownPacket == RecvPktNums \subseteq SentPktNums
 
@@ -105,8 +99,6 @@ Safety_UniqueCIDSet ==
     }
   IN Cardinality(newconnframes) = Cardinality({c \in newconnframes : TRUE})
 
-
-\* LIVENESS PROPERTIES
 
 Liveness_EveryPacketHandled == SentPktNums \subseteq (RecvPktNums \cup DropPktNums)
 
