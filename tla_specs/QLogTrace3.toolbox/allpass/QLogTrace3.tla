@@ -165,10 +165,13 @@ SAFETY ==
   Safety_NoUnknownRecv /\ Safety_PktNosMonotonic /\
   Safety_AllUsedStreamsTyped /\ Safety_AtMost1HandshakeClosePerTrace
 
-\* Liveness Properties
 Liveness_EverySentPktHandled ==
-  SentPktNums(ClientTrace, ci-1) \subseteq (RecvPktNums(ServerTrace, si-1) \cup DropPktNums(ServerTrace, si-1)) /\
-  SentPktNums(ServerTrace, si-1) \subseteq (RecvPktNums(ClientTrace, ci-1) \cup DropPktNums(ClientTrace, ci-1))
+  SentPktNums(ClientTrace, ci-1) 
+  \subseteq (RecvPktNums(ServerTrace, si-1) 
+  \cup DropPktNums(ServerTrace, si-1)) /\
+  SentPktNums(ServerTrace, si-1) 
+  \subseteq (RecvPktNums(ClientTrace, ci-1) 
+  \cup DropPktNums(ClientTrace, ci-1))
 
 Liveness_AllTypedStreamsUsed ==
   TypedStreams(ClientTrace, ci-1) \subseteq StreamIDs(ClientTrace, ci-1) /\
@@ -177,9 +180,13 @@ Liveness_AllTypedStreamsUsed ==
 Liveness_HandshakeEnables1RTT ==
   \A t \in {"Client", "Server"}:
     LET
-      trace == IF t = "Client" THEN ClientTrace ELSE ServerTrace
-      hsidx == IF HandshakeSent(trace, Len(trace)) # {} THEN Min(HandshakeSent(trace, Len(trace))) ELSE Len(trace) + 1
-      has1RTT == \E i \in SentEvents(trace, Len(trace)): i > hsidx /\ trace[i].data.header.packet_type = "1RTT"
+      trace == IF t = "Client" 
+      THEN ClientTrace 
+      ELSE ServerTrace
+      hsidx == IF HandshakeSent(trace, Len(trace)) # {} 
+      THEN Min(HandshakeSent(trace, Len(trace))) ELSE Len(trace) + 1
+      has1RTT == \E i \in SentEvents(trace, Len(trace)): 
+      i > hsidx /\ trace[i].data.header.packet_type = "1RTT"
     IN hsidx <= Len(trace) => has1RTT
 
 Liveness_ConnCloseEventuallyObserved ==
