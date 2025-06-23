@@ -1,0 +1,10 @@
+Install java
+sudo apt-get install -y openjdk-17-jre
+
+Install tla tools
+wget https://github.com/tlaplus/tlaplus/releases/latest/download/tla2tools.jar
+
+create tla+ file and cfg in same directory
+
+run the tla2tools and tla+ file to check the results
+java -jar tla2tools.jar QLogTrace.tla

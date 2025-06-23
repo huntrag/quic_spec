@@ -78,13 +78,72 @@ Safety_NoUnknownRecv ==
 \*     IN
 \*      \A pair \in SA:AckedPktNums(pair[1]["acked_ranges"]) \subseteq pair[2]
 
-Safety_PktNosMonotonic ==
-  LET
-    cseq == [n \in 1..Cardinality(SentEvents(ClientTrace, ci-1)) |-> CHOOSE i \in SentEvents(ClientTrace, ci-1): Cardinality({j \in SentEvents(ClientTrace, ci-1): j < i}) = n - 1]
-    sseq == [n \in 1..Cardinality(SentEvents(ServerTrace, si-1)) |-> CHOOSE i \in SentEvents(ServerTrace, si-1): Cardinality({j \in SentEvents(ServerTrace, si-1): j < i}) = n - 1]
-  IN
-    (\A n \in 2..Cardinality(cseq): ClientTrace[cseq[n]].data.header.packet_number > ClientTrace[cseq[n - 1]].data.header.packet_number) /\
-    (\A n \in 2..Cardinality(sseq): ServerTrace[sseq[n]].data.header.packet_number > ServerTrace[sseq[n - 1]].data.header.packet_number)
+\*Safety_PktNosMonotonic ==
+\*  LET
+\*    cseq == [n \in 1..Cardinality(SentEvents(ClientTrace, ci-1)) |-> CHOOSE i \in SentEvents(ClientTrace, ci-1): Cardinality({j \in SentEvents(ClientTrace, ci-1): j < i}) = n - 1]
+\*    sseq == [n \in 1..Cardinality(SentEvents(ServerTrace, si-1)) |-> CHOOSE i \in SentEvents(ServerTrace, si-1): Cardinality({j \in SentEvents(ServerTrace, si-1): j < i}) = n - 1]
+\*  IN
+\*    (\A n \in 2..Cardinality(cseq): ClientTrace[cseq[n]].data.header.packet_number > ClientTrace[cseq[n - 1]].data.header.packet_number) /\
+\*    (\A n \in 2..Cardinality(sseq): ServerTrace[sseq[n]].data.header.packet_number > ServerTrace[sseq[n - 1]].data.header.packet_number)
+\*Safety_PktNosMonotonic == 
+\*    LET 
+\*        cSent == SentEvents (ClientTrace, ci-1) 
+\*        sSent == SentEvents (ServerTrace, si-1) 
+\*        cseq == IF Cardinality (cSent) >= 2 
+\*                THEN [n \in 1.. Cardinality (cSent) |-> 
+\*                     CHOOSE i \in cSent: Cardinality({j \in cSent: j < i}) = n - 1] 
+\*                ELSE [n \in {} |-> 0] 
+\*                    sseq == IF Cardinality (sSent) >= 2 
+\*                THEN [n \in 1.. Cardinality (sSent) |-> 
+\*                     CHOOSE i \in sSent: Cardinality({j \in sSent: j < i}) = n - 1] 
+\*                ELSE [n \in {} |-> 0] 
+\*                    IN 
+\*                    (Cardinality(cSent) < 2 \ (\A n \in 2..Cardinality (cSent): 
+\*                    ClientTrace[cseq[n]].data.header.packet_number > ClientTrace [cseq[n-1]].data.header.packet_number)) 
+\*                    /\
+\*                    (Cardinality(sSent) < 2 \ (\A n \in 2..Cardinality (sSent): 
+\*                    ServerTrace[sseq[n]].data.header.packet_number > ServerTrace[sseq [n-1]].data.header.packet_number))
+
+\*Safety_PktNosMonotonic == 
+\*LET 
+\*    cSent == SentEvents(ClientTrace, ci-1) 
+\*    sSent == SentEvents(ServerTrace, si-1) 
+\*    cseq == [n \in 1..Cardinality (cSent) |-> 
+\*        CHOOSE i \in cSent: Cardinality({j \in cSent: j < i}) = n - 1] 
+\*    sseq == [n \in 1..Cardinality (sSent) |-> 
+\*        CHOOSE i \in sSent: Cardinality({j \in sSent: j < i}) = n - 1]
+\*IN 
+\*    IF Cardinality (cSent) < 2 THEN TRUE 
+\*    ELSE (\A n \in 2..Cardinality (cSent): 
+\*        ClientTrace[cseq[n]].data.header.packet_number > ClientTrace [cseq [n-1]].data.header.packet_number) 
+\*    /\
+\*    IF Cardinality (sSent) < 2 THEN TRUE 
+\*    ELSE (\A n \in 2.. Cardinality(sSent): 
+\*        ServerTrace[sseq[n]].data.header.packet_number > ServerTrace [sseq[n-1]].data.header.packet_number) 
+
+RECURSIVE CollectSentIndices(_,_) 
+    CollectSentIndices (trace, upto) == 
+        IF upto = 0 THEN <<>> 
+        ELSE 
+            LET tail == CollectSentIndices (trace, upto-1) 
+            IN IF IsPacketSent (trace[upto]) 
+            THEN tail \o << upto >> 
+            ELSE tail 
+
+Safety_PktNosMonotonic == 
+    LET 
+        cSentSeq == CollectSentIndices (ClientTrace, ci-1) 
+        cLen == Len(cSentSeq) 
+        sSentSeq == CollectSentIndices (ServerTrace, si-1) 
+        sLen == Len(sSentSeq) 
+    IN 
+        (cLen < 2 \/ (\A k \in 2..cLen : 
+        ClientTrace[cSentSeq[k]].data.header.packet_number > 
+        ClientTrace [cSentSeq[k-1]].data.header.packet_number)) 
+        /\
+        (sLen < 2 \/ (\A k \in 2..sLen : 
+        ServerTrace[sSentSeq[k]].data.header.packet_number > 
+        ServerTrace[sSentSeq [k-1]].data.header.packet_number))
 
 Safety_AllUsedStreamsTyped ==
   StreamIDs(ClientTrace, ci-1) \subseteq TypedStreams(ClientTrace, ci-1) /\
@@ -106,10 +165,13 @@ SAFETY ==
   Safety_NoUnknownRecv /\ Safety_PktNosMonotonic /\
   Safety_AllUsedStreamsTyped /\ Safety_AtMost1HandshakeClosePerTrace
 
-\* Liveness Properties
 Liveness_EverySentPktHandled ==
-  SentPktNums(ClientTrace, ci-1) \subseteq (RecvPktNums(ServerTrace, si-1) \cup DropPktNums(ServerTrace, si-1)) /\
-  SentPktNums(ServerTrace, si-1) \subseteq (RecvPktNums(ClientTrace, ci-1) \cup DropPktNums(ClientTrace, ci-1))
+  SentPktNums(ClientTrace, ci-1) 
+  \subseteq (RecvPktNums(ServerTrace, si-1) 
+  \cup DropPktNums(ServerTrace, si-1)) /\
+  SentPktNums(ServerTrace, si-1) 
+  \subseteq (RecvPktNums(ClientTrace, ci-1) 
+  \cup DropPktNums(ClientTrace, ci-1))
 
 Liveness_AllTypedStreamsUsed ==
   TypedStreams(ClientTrace, ci-1) \subseteq StreamIDs(ClientTrace, ci-1) /\
@@ -118,9 +180,13 @@ Liveness_AllTypedStreamsUsed ==
 Liveness_HandshakeEnables1RTT ==
   \A t \in {"Client", "Server"}:
     LET
-      trace == IF t = "Client" THEN ClientTrace ELSE ServerTrace
-      hsidx == IF HandshakeSent(trace, Len(trace)) # {} THEN Min(HandshakeSent(trace, Len(trace))) ELSE Len(trace) + 1
-      has1RTT == \E i \in SentEvents(trace, Len(trace)): i > hsidx /\ trace[i].data.header.packet_type = "1RTT"
+      trace == IF t = "Client" 
+      THEN ClientTrace 
+      ELSE ServerTrace
+      hsidx == IF HandshakeSent(trace, Len(trace)) # {} 
+      THEN Min(HandshakeSent(trace, Len(trace))) ELSE Len(trace) + 1
+      has1RTT == \E i \in SentEvents(trace, Len(trace)): 
+      i > hsidx /\ trace[i].data.header.packet_type = "1RTT"
     IN hsidx <= Len(trace) => has1RTT
 
 Liveness_ConnCloseEventuallyObserved ==
