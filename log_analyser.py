@@ -25,13 +25,22 @@ def json_value_to_tla(value, indent=0):
         raise ValueError(f"Unsupported JSON value: {value}")
 
 def process_events(events):
+    # Normalize and scale timestamps
+    times = [e.get("time", 0) for e in events if isinstance(e, dict) and "time" in e]
+    if not times:
+        min_time = 0
+    else:
+        min_time = min(times)
+    
+    scale_div = 1000    # Change divisor for desired time units (e.g., ms, us, etc)
+    
     processed = []
     for event in events:
-        if isinstance(event, dict) and len(event) >= 1:
-            # Assume the first element is time
-            time = event["time"]
-            if isinstance(time, (int, float)):
-                event["time"] = int(time * 10**4)
+        if isinstance(event, dict) and "time" in event:
+            t = event["time"]
+            # Subtract min_time, divide, and round to int
+            if isinstance(t, (int, float)):
+                event["time"] = int(round((t - min_time) / scale_div))
         processed.append(event)
     return processed
 
